@@ -66,11 +66,19 @@
         .hero { background: linear-gradient(135deg, #1a1a1a, #111); padding: 120px 20px; text-align: center; }
         .hero h1 { font-size: 3.5rem; margin: 0; letter-spacing: -1px; }
         .hero p { opacity: 0.7; max-width: 600px; margin: 20px auto; line-height: 1.6; font-size: 1.1rem; }
-        .hero button { background: #2b7cff; padding: 16px 36px; border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; }
+        
+        /* SEARCH BAR STYLING */
+        .search-container { margin: 30px auto; max-width: 400px; padding: 0 20px; }
+        #productSearch {
+            width: 100%; padding: 12px 20px; border-radius: 25px;
+            border: 1px solid #333; background: #1d1d1d; color: white;
+            font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        #productSearch:focus { border-color: #2b7cff; box-shadow: 0 0 10px rgba(43, 124, 255, 0.2); }
 
         /* TABS */
         .tabs-container { 
-            background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px);
+            background: rgba(20, 20, 20, 0.9); backdrop-filter: blur(10px);
             border-bottom: 1px solid #222; width: 100%; position: sticky; top: 0; z-index: 100;
         }
         .tabs { display: flex; gap: 12px; padding: 15px; overflow-x: auto; scrollbar-width: none; justify-content: center; }
@@ -82,12 +90,13 @@
         .tab.active { background: #2b7cff; color: #fff; }
 
         /* PRODUCT GRID */
-        .product-section { display: none; padding: 60px 20px; justify-content: center; flex-wrap: wrap; gap: 30px; min-height: 400px; }
+        .product-section { display: none; padding: 60px 20px; justify-content: center; flex-wrap: wrap; gap: 30px; min-height: 200px; }
         .product-section.active { display: flex; }
         .product-card { 
             background: #161616; width: 300px; border-radius: 20px; 
             overflow: hidden; border: 1px solid #222; position: relative; transition: 0.3s;
         }
+        .product-card.hidden { display: none; } /* Used for search filtering */
         .product-card:hover { transform: translateY(-10px); border-color: #444; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .product-card img { width: 100%; height: 220px; object-fit: cover; }
         .info-icon {
@@ -98,6 +107,8 @@
         .product-info { padding: 25px; text-align: center; }
         .product-info h3 { margin: 0 0 20px; font-size: 1.2rem; }
         .product-info a { display: block; padding: 12px; background: #2b7cff; border-radius: 10px; color: white; text-decoration: none; font-weight: 600; }
+
+        #noResults { display: none; text-align: center; padding: 40px; color: #888; font-style: italic; }
 
         /* FOOTER */
         footer { background: #111; padding: 60px 20px; text-align: center; border-top: 1px solid #222; margin-top: 50px; }
@@ -154,8 +165,11 @@
     <div id="main-content">
         <section class="hero">
             <h1>Products that I use</h1>
-            <p>A curated collection of essentials to level up your game. No fluff, just the gear that actually makes the cut.</p>
-            <button onclick="document.querySelector('.tabs-container').scrollIntoView();">Explore Collection</button>
+            <p>Curated list of essentials. Respect your wallet—buy only what's necessary.</p>
+            
+            <div class="search-container">
+                <input type="text" id="productSearch" placeholder="Search products..." onkeyup="filterProducts()">
+            </div>
         </section>
 
         <div class="tabs-container">
@@ -166,6 +180,8 @@
                 <button class="tab" data-cat="clothing">Clothing</button>
             </div>
         </div>
+
+        <div id="noResults">No products found matching your search.</div>
 
         <div id="supplements" class="product-section active"></div>
         <div id="accessories" class="product-section"></div>
@@ -178,9 +194,8 @@
             <a href="#">YouTube</a>
             <a href="https://www.instagram.com/iron_crafted_life/">Instagram</a>
             <a href="#">Twitter</a>
-            <a href="#">Discord</a>
         </div>
-        <p class="copyright">&copy; 2026 Your Name. All rights reserved.</p>
+        <p class="copyright">&copy; 2026 Anmol Warikoo. All rights reserved.</p>
     </footer>
 
     <button id="backToTop" onclick="window.scrollTo(0,0)">↑</button>
@@ -192,7 +207,6 @@
 
         window.onload = () => showModal('infoModal');
 
-        // Show/Hide Back to Top Button
         window.onscroll = function() {
             const btn = document.getElementById("backToTop");
             if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
@@ -219,12 +233,14 @@
             }
         }
 
+        // Initialize Products
         if (typeof productData !== 'undefined') {
             productData.forEach(p => {
                 const container = document.getElementById(p.category);
                 if (container) {
                     const card = document.createElement("div");
                     card.className = "product-card";
+                    card.setAttribute('data-name', p.name.toLowerCase());
                     card.innerHTML = `
                         <div class="info-icon" onclick="openProductInfo('${p.name}')">i</div>
                         <img src="${p.img}" alt="${p.name}">
@@ -238,8 +254,33 @@
             });
         }
 
+        // SEARCH FUNCTION
+        function filterProducts() {
+            const query = document.getElementById('productSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.product-card');
+            const noResults = document.getElementById('noResults');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                if (name.includes(query)) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            noResults.style.display = (visibleCount === 0) ? 'block' : 'none';
+        }
+
+        // Tab Switching
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener("click", () => {
+                // Clear search when switching tabs to avoid confusion
+                document.getElementById('productSearch').value = '';
+                filterProducts();
+
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove("active"));
                 document.querySelectorAll('.product-section').forEach(s => s.classList.remove("active"));
                 tab.classList.add("active");
