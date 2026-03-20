@@ -10,6 +10,7 @@
             margin: 0; padding: 0;
             font-family: "Inter", Arial, sans-serif;
             background: #0f0f0f; color: #e6e6e6;
+            position: relative; /* Helps the button stay relative to the page */
         }
 
         /* MODAL STYLES */
@@ -55,13 +56,11 @@
             padding: 12px 40px; border-radius: 8px; font-weight: 600; cursor: pointer;
         }
 
-        /* Hero & Navigation */
-        /* Mobile First: The button stays at the top of the page (scrolls away) */
+        /* THE RESPONSIVE BUTTON */
         .read-this-toggle {
-            position: relative; /* Changes from fixed to relative */
-            display: block;
-            width: fit-content;
-            margin: 20px auto; /* Centers it on mobile */
+            position: absolute; /* Mobile: stays at the top and scrolls away */
+            top: 20px;
+            right: 20px;
             z-index: 1000;
             background: #2b7cff;
             color: white;
@@ -70,18 +69,20 @@
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: background 0.2s;
         }
-        
-        /* Desktop: The button floats/moves with the viewer */
+
+        .read-this-toggle:hover { background: #1a66ff; }
+
+        /* Desktop: The button stays fixed in the corner while viewing */
         @media (min-width: 769px) {
             .read-this-toggle {
-                position: fixed; /* Returns to floating */
-                top: 20px;
-                right: 20px;
-                margin: 0; /* Removes the mobile centering */
+                position: fixed; 
             }
         }
 
+        /* HERO & NAVIGATION */
         .hero { background: linear-gradient(135deg, #1a1a1a, #111); padding: 100px 20px; text-align: center; }
         .hero h1 { font-size: 3rem; margin: 0; }
         .hero p { opacity: 0.7; max-width: 700px; margin: 20px auto; line-height: 1.6; }
@@ -137,7 +138,6 @@
             border-radius: 8px; color: white; text-decoration: none; font-weight: 600;
         }
 
-        /* INFO CONTENT STYLE */
         .info-label { color: #2b7cff; font-weight: 600; margin-top: 15px; display: block; }
         .info-text { margin: 4px 0 10px 0; line-height: 1.5; color: #ccc; }
     </style>
@@ -169,10 +169,9 @@
         </div>
     </div>
 
-    
+    <button class="read-this-toggle" onclick="showModal('infoModal')">Read This</button>
 
     <div id="main-content">
-        <button class="read-this-toggle" onclick="showModal('infoModal')">Read This</button>
         <section class="hero">
             <h1>Products that I use</h1>
             <p>Curated list of essentials. Using these links supports the channel. Respect your wallet—buy only what's necessary.</p>
@@ -193,14 +192,14 @@
         <div id="fitness" class="product-section"></div>
         <div id="clothing" class="product-section"></div>
     </div>
-<script src="product.js"></script>
+
+    <script src="product.js"></script>
+
     <script>
         const showModal = (id) => document.getElementById(id).style.display = 'flex';
         const hideModal = (id) => document.getElementById(id).style.display = 'none';
 
         window.onload = () => showModal('infoModal');
-
-        
 
         function openProductInfo(name) {
             const p = productData.find(x => x.name === name);
@@ -219,22 +218,25 @@
             }
         }
 
-        productData.forEach(p => {
-            const container = document.getElementById(p.category);
-            if (container) {
-                const card = document.createElement("div");
-                card.className = "product-card";
-                card.innerHTML = `
-                    <div class="info-icon" onclick="openProductInfo('${p.name}')">i</div>
-                    <img src="${p.img}" alt="${p.name}">
-                    <div class="product-info">
-                        <h3>${p.name}</h3>
-                        <a href="${p.buy}" target="_blank">Buy Now</a>
-                    </div>
-                `;
-                container.appendChild(card);
-            }
-        });
+        // Check if productData is loaded from external script
+        if (typeof productData !== 'undefined') {
+            productData.forEach(p => {
+                const container = document.getElementById(p.category);
+                if (container) {
+                    const card = document.createElement("div");
+                    card.className = "product-card";
+                    card.innerHTML = `
+                        <div class="info-icon" onclick="openProductInfo('${p.name}')">i</div>
+                        <img src="${p.img}" alt="${p.name}">
+                        <div class="product-info">
+                            <h3>${p.name}</h3>
+                            <a href="${p.buy}" target="_blank">Buy Now</a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+        }
 
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener("click", () => {
