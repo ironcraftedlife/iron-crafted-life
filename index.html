@@ -56,10 +56,30 @@
         }
 
         /* Hero & Navigation */
+        /* Mobile First: The button stays at the top of the page (scrolls away) */
         .read-this-toggle {
-            position: fixed; top: 20px; right: 20px; z-index: 1000;
-            background: #2b7cff; color: white; border: none;
-            padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
+            position: relative; /* Changes from fixed to relative */
+            display: block;
+            width: fit-content;
+            margin: 20px auto; /* Centers it on mobile */
+            z-index: 1000;
+            background: #2b7cff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Desktop: The button floats/moves with the viewer */
+        @media (min-width: 769px) {
+            .read-this-toggle {
+                position: fixed; /* Returns to floating */
+                top: 20px;
+                right: 20px;
+                margin: 0; /* Removes the mobile centering */
+            }
         }
 
         .hero { background: linear-gradient(135deg, #1a1a1a, #111); padding: 100px 20px; text-align: center; }
