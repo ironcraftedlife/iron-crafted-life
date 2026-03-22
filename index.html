@@ -51,29 +51,15 @@
         .hero { background: #111; padding: 60px 20px 20px 20px; text-align: center; }
         .hero h1 { font-size: 2.5rem; margin: 0; }
         
-        .search-outer {
-            margin: 30px auto 10px auto;
-            max-width: 500px;
-            width: 100%;
-            position: relative;
-        }
+        .search-outer { margin: 30px auto 10px auto; max-width: 500px; width: 100%; position: relative; }
         #productSearch {
-            width: 90%;
-            padding: 15px 25px;
-            border-radius: 30px;
-            border: 1px solid #333;
-            background: #161616;
-            color: white;
-            font-size: 1rem;
-            outline: none;
+            width: 90%; padding: 15px 25px; border-radius: 30px; border: 1px solid #333;
+            background: #161616; color: white; font-size: 1rem; outline: none;
         }
-
         #suggestions {
             position: absolute; top: 100%; left: 5%; right: 5%;
-            background: #1d1d1d; border: 1px solid #333;
-            border-radius: 10px; z-index: 1500; display: none;
-            margin-top: 5px; max-height: 200px; overflow-y: auto;
-            text-align: left;
+            background: #1d1d1d; border: 1px solid #333; border-radius: 10px; z-index: 1500;
+            display: none; margin-top: 5px; max-height: 200px; overflow-y: auto; text-align: left;
         }
         .suggestion-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #222; }
         .suggestion-item:hover { background: #2b7cff; }
@@ -102,17 +88,14 @@
         /* PRODUCT SECTIONS */
         .product-section { display: none; padding: 20px; justify-content: center; flex-wrap: wrap; gap: 20px; }
         .product-section.active { display: flex; }
-        
         #search-results-section { display: none; padding: 20px; justify-content: center; flex-wrap: wrap; gap: 20px; }
         .search-mode #search-results-section { display: flex; }
         .search-mode .tabs-container, .search-mode .product-section { display: none !important; }
 
         .product-card { background: #161616; width: 280px; border-radius: 15px; overflow: hidden; border: 1px solid #222; position: relative; }
         .product-card img { width: 100%; height: 200px; object-fit: cover; }
-        
-        .info-icon { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .info-icon { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
         .share-icon { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
-
         .product-info { padding: 15px; text-align: center; }
         .product-info h3 { margin: 0 0 10px; font-size: 1.1rem; }
         .product-info a { display: block; padding: 10px; background: #2b7cff; border-radius: 5px; color: white; text-decoration: none; font-weight: 600; }
@@ -123,16 +106,11 @@
         .info-label { color: #2b7cff; font-weight: 600; margin-top: 15px; display: block; }
         .info-text { margin: 4px 0 10px 0; line-height: 1.5; color: #ccc; }
 
-        /* FOOTER & BACK TO TOP */
+        /* FOOTER */
         footer { background: #111; padding: 40px 20px; text-align: center; border-top: 1px solid #222; margin-top: 50px; }
         .social-links { margin-bottom: 15px; }
         .social-links a { color: #2b7cff; text-decoration: none; margin: 0 10px; }
-        
-        #backToTop {
-            position: fixed; bottom: 20px; right: 20px; background: #2b7cff;
-            color: white; width: 45px; height: 45px; border-radius: 50%;
-            border: none; cursor: pointer; display: none; z-index: 1000;
-        }
+        #backToTop { position: fixed; bottom: 20px; right: 20px; background: #2b7cff; color: white; width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; display: none; z-index: 1000; }
 
         @media (max-width: 768px) {
             .reel-container { justify-content: flex-start; padding-left: 15px; }
@@ -177,7 +155,7 @@
     <div id="main-content">
         <section class="hero">
             <h1>Products that I use</h1>
-            <p style="opacity: 0.7; max-width: 600px; margin: 10px auto;">Curated list of essentials. Using these links supports the channel. Respect your wallet—buy only what's necessary.</p>
+            <p style="opacity: 0.7; max-width: 600px; margin: 10px auto;">Curated list of essentials. Respect your wallet—buy only what's necessary.</p>
             
             <div class="search-outer">
                 <input type="text" id="productSearch" placeholder="Search products..." oninput="handleGlobalSearch()" autocomplete="off">
@@ -231,6 +209,7 @@
 
     <script src="product.js"></script>
     <script>
+
         const showModal = (id) => document.getElementById(id).style.display = 'flex';
         const hideModal = (id) => document.getElementById(id).style.display = 'none';
 
@@ -248,12 +227,8 @@
         }
 
         function shareProduct(name, url) {
-            if (navigator.share) {
-                navigator.share({ title: name, url: url }).catch(console.error);
-            } else {
-                navigator.clipboard.writeText(url);
-                alert("Link copied!");
-            }
+            if (navigator.share) navigator.share({ title: name, url: url });
+            else { navigator.clipboard.writeText(url); alert("Link copied!"); }
         }
 
         function createCard(p) {
@@ -272,32 +247,29 @@
         }
 
         function renderAll() {
-            if (typeof productData !== 'undefined') {
-                productData.forEach(p => {
-                    const container = document.getElementById(p.category);
-                    if (container) container.appendChild(createCard(p));
-                });
-            }
+            productData.forEach(p => {
+                const container = document.getElementById(p.category);
+                if (container) container.appendChild(createCard(p));
+            });
         }
 
         function handleGlobalSearch() {
             const query = document.getElementById('productSearch').value.toLowerCase().trim();
             const body = document.getElementById('pageBody');
-            const resultsContainer = document.getElementById('search-results-section');
+            const results = document.getElementById('search-results-section');
             const suggestions = document.getElementById('suggestions');
-            const noResults = document.getElementById('noResults');
+            const noRes = document.getElementById('noResults');
             
             suggestions.innerHTML = '';
             if (query.length > 0) {
                 body.classList.add('search-mode');
-                resultsContainer.innerHTML = '';
+                results.innerHTML = '';
                 const matches = productData.filter(p => p.name.toLowerCase().includes(query));
-                
                 if (matches.length > 0) {
-                    noResults.style.display = 'none';
+                    noRes.style.display = 'none';
                     suggestions.style.display = 'block';
                     matches.forEach(m => {
-                        resultsContainer.appendChild(createCard(m));
+                        results.appendChild(createCard(m));
                         const item = document.createElement('div');
                         item.className = 'suggestion-item';
                         item.innerText = m.name;
@@ -309,13 +281,13 @@
                         suggestions.appendChild(item);
                     });
                 } else {
-                    noResults.style.display = 'block';
+                    noRes.style.display = 'block';
                     suggestions.style.display = 'none';
                 }
             } else {
                 body.classList.remove('search-mode');
                 suggestions.style.display = 'none';
-                noResults.style.display = 'none';
+                noRes.style.display = 'none';
             }
         }
 
@@ -345,7 +317,6 @@
             });
         });
 
-        // Close search suggestions when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.search-outer')) document.getElementById('suggestions').style.display = 'none';
         });
