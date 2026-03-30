@@ -357,68 +357,59 @@
         function closeVideo() {
             const player = document.getElementById('reelPlayer');
             player.pause();
-            player.src = '';
+            player.removeAttribute('src');
+            player.load();
             hideModal('videoModal');
         }
 
-        /* ─── REEL LAZY LOADING ──────────────────────────────── */
-        /*
-         * How it works:
-         *  1. User taps a reel circle.
-         *  2. The gradient ring is replaced with a spinning arc (CSS animation).
-         *  3. A hidden <video> element is created and preloads the video src.
-         *  4. Once enough data is loaded (canplay event), the modal opens and
-         *     playback begins. The spinner is removed.
-         *
-         * This means ZERO video bytes are downloaded on page load —
-         * products and text render instantly.
-         */
+        /* ─── REEL LAZY LOADING ──────────────────────────────────
+         * Flow:
+         *  1. User taps circle → spinner appears on the ring
+         *  2. The modal player's src is set and it preloads silently (modal stays CLOSED)
+         *  3. Only when canplay fires → modal opens + video plays
+         *  Result: no loading spinner ever appears inside the video player
+         * ─────────────────────────────────────────────────────── */
         document.querySelectorAll('.reel-item').forEach(item => {
             item.addEventListener('click', () => {
-                const src    = item.dataset.src;
-                const ring   = item.querySelector('.reel-ring');
+                const src  = item.dataset.src;
+                const ring = item.querySelector('.reel-ring');
 
-                // Don't double-trigger while already loading
                 if (ring.classList.contains('loading')) return;
-
-                // Show spinner
                 ring.classList.add('loading');
 
-                // Create a temporary video element to preload
-                const tempVideo = document.createElement('video');
-                tempVideo.preload = 'auto';
-                tempVideo.src = src;
+                const player = document.getElementById('reelPlayer');
 
-                const stopSpinner = () => ring.classList.remove('loading');
+                // Abort any previous load
+                player.pause();
+                player.removeAttribute('src');
+                player.load();
 
-                tempVideo.addEventListener('canplay', () => {
-                    stopSpinner();
+                // Set new source
+                player.src = src;
+                player.load();
 
-                    // Hand off to the modal player
-                    const player = document.getElementById('reelPlayer');
-                    player.src = src;
+                const openAndPlay = () => {
+                    ring.classList.remove('loading');
                     showModal('videoModal');
-                    player.play().catch(() => {}); // autoplay may be blocked on some browsers
+                    player.play().catch(() => {});
+                };
 
-                    // Free temp element
-                    tempVideo.src = '';
-                }, { once: true });
+                // Use one-time listener
+                player.addEventListener('canplay', openAndPlay, { once: true });
 
-                // Timeout fallback — open anyway after 8s if canplay doesn't fire
+                // Fallback: open after 6s regardless
                 const fallback = setTimeout(() => {
-                    stopSpinner();
-                    const player = document.getElementById('reelPlayer');
-                    player.src = src;
+                    player.removeEventListener('canplay', openAndPlay);
+                    ring.classList.remove('loading');
                     showModal('videoModal');
-                }, 8000);
+                }, 6000);
 
-                tempVideo.addEventListener('canplay', () => clearTimeout(fallback), { once: true });
+                player.addEventListener('canplay', () => clearTimeout(fallback), { once: true });
 
-                // Silently stop spinner on error — browser will still try to play in modal
-                tempVideo.addEventListener('error', () => {
-                    stopSpinner();
-                    const player = document.getElementById('reelPlayer');
-                    player.src = src;
+                player.addEventListener('error', () => {
+                    clearTimeout(fallback);
+                    player.removeEventListener('canplay', openAndPlay);
+                    ring.classList.remove('loading');
                     showModal('videoModal');
                 }, { once: true });
             });
