@@ -155,5 +155,33 @@ const productData = [
                 when: "During workouts, sports, walking, climbing stairs, or everyday use if you have knee discomfort. Suitable for post-injury recovery and older adults with weak knees.",
                 practices: "Tighten or loosen the compression strap based on activity level. Hand wash in cold water, air dry flat. Available in M, L, XL, XXL.",
                 deficiency: "Weak or unsupported knees can lead to increased risk of ligament injury, chronic pain, poor stability during exercise, and difficulty with daily movement."
+            },
+            
+            // ── NEW GNC PRODUCTS ──────────────────────────────────────────
+            {
+                name: "GNC Pro Performance 100% Whey Protein",
+                img: "images/gnc-whey-protein.webp", // Update with your actual image path
+                buy: "https://www.guardian.in/products/gnc-pro-performance-100-whey-protein",
+                category: "supplements",
+                what: "A high-quality macronutrient supplement delivering 100% pure whey protein to support muscle maintenance and growth.",
+                benefits: "Promotes lean muscle growth, accelerates post-workout recovery, and helps meet daily protein targets. Use code WARIKO for an additional 15% discount.",
+                dosage: "1 scoop (typically providing ~24g protein) mixed with water or milk.",
+                sources: "Derived from dairy (whey).",
+                when: "Post-workout, first thing in the morning, or as a snack between meals.",
+                practices: "Mix with water for faster digestion post-workout, or milk/smoothies for sustained release. Store in a cool, dry place.",
+                deficiency: "Muscle loss, prolonged muscle soreness, slow recovery, fatigue, and difficulty building strength."
+            },
+            {
+                name: "GNC Pro Performance Creatine Monohydrate",
+                img: "images/gnc-creatine.webp", // Update with your actual image path
+                buy: "https://www.guardian.in/products/gnc-pro-performance-creatine-monohydrate-3000mg",
+                category: "supplements",
+                what: "A highly researched supplement supplying 3000mg of pure creatine monohydrate per serving to enhance cellular energy production.",
+                benefits: "Increases power output, boosts muscle strength, improves high-intensity exercise performance, and hydrates muscle cells. Use code WARIKO for an additional 15% discount.",
+                dosage: "3000mg (3g) daily.",
+                sources: "Naturally found in small amounts in red meat and seafood, but synthesized for purity in supplements.",
+                when: "Can be taken pre-workout, post-workout, or any time of day for maintenance.",
+                practices: "Mix with water, juice, or a protein shake. Ensure adequate daily water intake (at least 3-4 liters) to prevent cramping.",
+                deficiency: "Rapid muscle fatigue during explosive or heavy lifting, stagnant strength gains."
             }
         ];
