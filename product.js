@@ -88,5 +88,72 @@ const productData = [
                 when: "Daily use.",
                 practices: "Use compression straps.",
                 deficiency: "N/A"
+            },
+
+            // ── NEW FRIDO PRODUCTS ──────────────────────────────────────────
+            {
+                name: "Frido Posture Corrector",
+                img: "images/frido-posture-corrector.webp",
+                buy: "https://myfrido.com/products/frido-orthotics-posture-corrector?variant=50903178641689",
+                category: "accessories",
+                what: "A slim, lightweight (115g) posture corrector that gently pulls your shoulders back into proper alignment. Invisible under regular clothing.",
+                benefits: "Corrects slouching, trains muscles to maintain proper posture, reduces upper back and shoulder discomfort, helps prevent early signs of kyphosis. Use code ANMOLWA for an additional 15% discount.",
+                dosage: "Start with 15–20 min/day, gradually increase to 1–2 hours/day as tolerated.",
+                sources: "N/A",
+                when: "During work, commuting, studying, or any prolonged sitting. Wear over thin base clothing.",
+                practices: "Do not wear directly on bare skin. Consistent daily use over 2–3 weeks leads to lasting posture improvements. Available in S, M, L — measure chest to find your size.",
+                deficiency: "Poor posture signs: rounded shoulders, forward head, upper back tightness, frequent neck/shoulder pain."
+            },
+            {
+                name: "Frido x HRX Barefoot Sock Shoe Pro",
+                img: "images/frido-sock-shoe.webp",
+                buy: "https://myfrido.com/products/frido-x-hrx-barefoot-sock-shoe-pro?variant=51641403670809",
+                category: "accessories",
+                what: "A zero-drop barefoot sock shoe with a wide toe box, split-toe design, and 3mm GripFlex rubber sole. Collaboration with HRX.",
+                benefits: "Encourages natural foot movement, improves balance and stability, reduces strain on knees, hips, and lower back. Lightweight and foldable for travel. Use code ANMOLWA for an additional 15% discount.",
+                dosage: "N/A",
+                sources: "N/A",
+                when: "Workouts, walking, gym sessions, office, or home use. Ideal for short runs and warm-ups — not for long-distance road running.",
+                practices: "Hand wash with cold water and mild detergent. Air dry in shade. Expect ~600 km lifespan on non-abrasive surfaces. Black granules from the sole initially are normal.",
+                deficiency: "Weak foot arches, poor balance, knee/hip misalignment, and foot fatigue can result from years of wearing overly cushioned or narrow-toed shoes."
+            },
+            {
+                name: "Frido Cloud Comfort Slippers",
+                img: "images/frido-slippers.webp",
+                buy: "https://myfrido.com/products/frido-cloud-comfort-arch-support-slippers?variant=51352664703257",
+                category: "accessories",
+                what: "Arch support slippers with EVA foam cushioning, anti-skid rubber herringbone sole, and thermal insulation. Minimal, versatile design for daily wear.",
+                benefits: "Relieves foot pain and fatigue, supports natural foot alignment, reduces stress on knees/hips/back, prevents slipping on wet floors, noise-free walking. Use code ANMOLWA for an additional 15% discount.",
+                dosage: "N/A",
+                sources: "N/A",
+                when: "Daily indoor use at home, during travel, or casual outings.",
+                practices: "Wipe with a soft damp cloth to clean. Air dry naturally. If you have wide feet, size up for best comfort. Available in sizes 3–12 UK.",
+                deficiency: "Flat feet, arch pain, heel strain, and poor posture can worsen without proper footwear support."
+            },
+            {
+                name: "Frido Ultimate Car Comfort Bundle",
+                img: "images/frido-car-bundle.webp",
+                buy: "https://myfrido.com/products/ultimate-car-comfort-bundle?variant=50107509637401",
+                category: "accessories",
+                what: "A 3-piece car comfort bundle: Ultimate Car Neck Rest Pillow, Ultimate Car Back Rest Pillow, and Ultimate Car Wedge Seat Cushion — designed for long drives and daily commutes.",
+                benefits: "Prevents neck aches, keeps back upright and supported, eases hip pressure, reduces overall body fatigue during long drives. Use code ANMOLWA for an additional 15% discount.",
+                dosage: "N/A",
+                sources: "N/A",
+                when: "Any car ride — daily commutes, road trips, or long-distance travel.",
+                practices: "Position neck pillow at cervical spine level, back rest against lumbar region, and wedge cushion flat on the seat for full postural support.",
+                deficiency: "Poor car ergonomics leads to chronic neck stiffness, lower back pain, hip tightness, and fatigue — especially for frequent drivers."
+            },
+            {
+                name: "Frido Knee Support Wrap",
+                img: "images/frido-knee-wrap.webp",
+                buy: "https://myfrido.com/products/frido-orthotics-knee-support-wrap",
+                category: "accessories",
+                what: "An open-patella knee wrap with metal side stabilizers, adjustable compression strap, and breathable mesh fabric. Universal fit — works on both left and right knee.",
+                benefits: "Reduces kneecap pressure, stabilizes the joint, prevents ligament strain, improves comfort while walking or exercising. Fits over or under clothing discreetly. Use code ANMOLWA for an additional 15% discount.",
+                dosage: "N/A",
+                sources: "N/A",
+                when: "During workouts, sports, walking, climbing stairs, or everyday use if you have knee discomfort. Suitable for post-injury recovery and older adults with weak knees.",
+                practices: "Tighten or loosen the compression strap based on activity level. Hand wash in cold water, air dry flat. Available in M, L, XL, XXL.",
+                deficiency: "Weak or unsupported knees can lead to increased risk of ligament injury, chronic pain, poor stability during exercise, and difficulty with daily movement."
             }
         ];
