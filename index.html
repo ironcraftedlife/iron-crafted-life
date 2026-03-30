@@ -64,20 +64,94 @@
         .suggestion-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #222; }
         .suggestion-item:hover { background: #2b7cff; }
 
-        /* VIDEO THUMBNAILS (REEL STYLE) */
+        /* =============================================
+           REEL CIRCLES — INSTAGRAM-STYLE LAZY LOADING
+           ============================================= */
         .reel-container {
             display: flex; gap: 15px; justify-content: center;
             padding: 20px 0; overflow-x: auto; scrollbar-width: none;
         }
         .reel-container::-webkit-scrollbar { display: none; }
-        .reel-item { cursor: pointer; flex-shrink: 0; transition: transform 0.2s; }
-        .reel-item:hover { transform: scale(1.05); }
-        .reel-circle {
-            width: 75px; height: 75px; border-radius: 50%;
-            border: 2px solid #2b7cff; padding: 3px; background: #000;
-            overflow: hidden;
+
+        .reel-item {
+            cursor: pointer; flex-shrink: 0;
+            transition: transform 0.2s;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
         }
-        .reel-circle video { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .reel-item:hover { transform: scale(1.05); }
+
+        /* The ring wrapper — holds spinner + circle */
+        .reel-ring {
+            width: 75px; height: 75px;
+            border-radius: 50%;
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Default gradient ring (idle state) */
+        .reel-ring::before {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(135deg, #2b7cff, #a855f7, #2b7cff);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            transition: opacity 0.3s;
+        }
+
+        /* Loading spinner ring — hidden by default */
+        .reel-ring .spinner-ring {
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #2b7cff;
+            border-right-color: #2b7cff;
+            animation: spin 0.9s linear infinite;
+            display: none; /* hidden until loading */
+            z-index: 2;
+        }
+
+        /* When loading: show spinner, dim static ring */
+        .reel-ring.loading::before { opacity: 0.15; }
+        .reel-ring.loading .spinner-ring { display: block; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Inner circle — shows poster image (no autoplay video) */
+        .reel-circle {
+            width: 67px; height: 67px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #1a1a1a;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Poster image — shown before video loads */
+        .reel-circle img.reel-poster {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        /* Play icon overlay */
+        .reel-play-icon {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.85);
+            font-size: 20px;
+            pointer-events: none;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+        }
+
+        .reel-label {
+            font-size: 0.7rem;
+            color: #888;
+            white-space: nowrap;
+        }
 
         /* TABS */
         .tabs-container { background: #141414; border-bottom: 1px solid #222; width: 100%; position: sticky; top: 0; z-index: 100; }
@@ -113,13 +187,14 @@
         #backToTop { position: fixed; bottom: 20px; right: 20px; background: #2b7cff; color: white; width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; display: none; z-index: 1000; }
 
         @media (max-width: 768px) {
-            .reel-container { justify-content: flex-start; padding-left: 15px; }
+            .reel-container { justify-content: center; }
             .hero h1 { font-size: 2rem; }
         }
     </style>
 </head>
 <body id="pageBody">
 
+    <!-- Info Modal -->
     <div class="modal-overlay" id="infoModal">
         <div class="modal-window">
             <div class="modal-header"><h2>Important Information</h2><button class="close-modal" onclick="hideModal('infoModal')">&times;</button></div>
@@ -131,6 +206,7 @@
         </div>
     </div>
 
+    <!-- Product Detail Modal -->
     <div class="modal-overlay" id="productDetailModal">
         <div class="modal-window">
             <div class="modal-header"><h2 id="detailTitle">Product Info</h2><button class="close-modal" onclick="hideModal('productDetailModal')">&times;</button></div>
@@ -139,6 +215,7 @@
         </div>
     </div>
 
+    <!-- Video Modal -->
     <div class="modal-overlay" id="videoModal">
         <div class="modal-window video-modal-window">
             <div class="modal-header" style="border:none; position:absolute; right:0; background:transparent;">
@@ -162,19 +239,73 @@
                 <div id="suggestions"></div>
             </div>
 
-            <div class="reel-container">
-                <div class="reel-item" onclick="playVideo('videos/Video1.mp4')">
-                    <div class="reel-circle"><video src="videos/Video1.mp4" autoplay muted loop playsinline></video></div>
+            <!--
+                REEL SECTION
+                ─────────────────────────────────────────────────────────────────
+                HOW IT WORKS:
+                  • Each circle shows a static poster image (no video loads on page load).
+                  • On click: the ring switches to a spinning loader, the video is fetched,
+                    and once ready it opens in the modal. Page content loads instantly.
+
+                HOW TO USE:
+                  • data-src  → path or URL to your video (local, S3, Bunny CDN, GDrive direct link…)
+                  • data-poster → path or URL to a thumbnail/poster image for the circle
+                  • data-label → short caption shown below the circle
+
+                RECOMMENDED VIDEO HOSTS (no embed restrictions):
+                  • Bunny CDN  (bunnycdn.com) — cheapest, fastest for video
+                  • Cloudflare R2 / AWS S3 — reliable, pay-per-use
+                  • Google Drive — free; use direct download link format:
+                      https://drive.google.com/uc?export=download&id=FILE_ID
+                  • Supabase Storage — free tier, easy API
+                ─────────────────────────────────────────────────────────────────
+            -->
+            <div class="reel-container" id="reelContainer">
+
+                <div class="reel-item" data-src="videos/Video1.mp4" data-poster="posters/poster1.jpg" data-label="Reel 1">
+                    <div class="reel-ring">
+                        <div class="spinner-ring"></div>
+                        <div class="reel-circle">
+                            <img class="reel-poster" src="posters/poster1.jpg" alt="Reel 1" onerror="this.style.display='none'">
+                            <div class="reel-play-icon">▶</div>
+                        </div>
+                    </div>
+                    <span class="reel-label">Reel 1</span>
                 </div>
-                <div class="reel-item" onclick="playVideo('videos/Video2.mp4')">
-                    <div class="reel-circle"><video src="videos/Video2.mp4" autoplay muted loop playsinline></video></div>
+
+                <div class="reel-item" data-src="videos/Video2.mp4" data-poster="posters/poster2.jpg" data-label="Reel 2">
+                    <div class="reel-ring">
+                        <div class="spinner-ring"></div>
+                        <div class="reel-circle">
+                            <img class="reel-poster" src="posters/poster2.jpg" alt="Reel 2" onerror="this.style.display='none'">
+                            <div class="reel-play-icon">▶</div>
+                        </div>
+                    </div>
+                    <span class="reel-label">Reel 2</span>
                 </div>
-                <div class="reel-item" onclick="playVideo('videos/Video3.mp4')">
-                    <div class="reel-circle"><video src="videos/Video3.mp4" autoplay muted loop playsinline></video></div>
+
+                <div class="reel-item" data-src="videos/Video3.mp4" data-poster="posters/poster3.jpg" data-label="Reel 3">
+                    <div class="reel-ring">
+                        <div class="spinner-ring"></div>
+                        <div class="reel-circle">
+                            <img class="reel-poster" src="posters/poster3.jpg" alt="Reel 3" onerror="this.style.display='none'">
+                            <div class="reel-play-icon">▶</div>
+                        </div>
+                    </div>
+                    <span class="reel-label">Reel 3</span>
                 </div>
-                <div class="reel-item" onclick="playVideo('videos/Video4.mp4')">
-                    <div class="reel-circle"><video src="videos/Video4.mp4" autoplay muted loop playsinline></video></div>
+
+                <div class="reel-item" data-src="videos/Video4.mp4" data-poster="posters/poster4.jpg" data-label="Reel 4">
+                    <div class="reel-ring">
+                        <div class="spinner-ring"></div>
+                        <div class="reel-circle">
+                            <img class="reel-poster" src="posters/poster4.jpg" alt="Reel 4" onerror="this.style.display='none'">
+                            <div class="reel-play-icon">▶</div>
+                        </div>
+                    </div>
+                    <span class="reel-label">Reel 4</span>
                 </div>
+
             </div>
         </section>
 
@@ -210,22 +341,79 @@
     <script src="product.js"></script>
     <script>
 
+        /* ─── Modals ─────────────────────────────────────────── */
         const showModal = (id) => document.getElementById(id).style.display = 'flex';
         const hideModal = (id) => document.getElementById(id).style.display = 'none';
 
-        function playVideo(src) {
-            const player = document.getElementById('reelPlayer');
-            player.src = src;
-            showModal('videoModal');
-            player.play();
-        }
-
+        /* ─── Video Modal ────────────────────────────────────── */
         function closeVideo() {
             const player = document.getElementById('reelPlayer');
             player.pause();
+            player.src = '';
             hideModal('videoModal');
         }
 
+        /* ─── REEL LAZY LOADING ──────────────────────────────── */
+        /*
+         * How it works:
+         *  1. User taps a reel circle.
+         *  2. The gradient ring is replaced with a spinning arc (CSS animation).
+         *  3. A hidden <video> element is created and preloads the video src.
+         *  4. Once enough data is loaded (canplay event), the modal opens and
+         *     playback begins. The spinner is removed.
+         *
+         * This means ZERO video bytes are downloaded on page load —
+         * products and text render instantly.
+         */
+        document.querySelectorAll('.reel-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const src    = item.dataset.src;
+                const ring   = item.querySelector('.reel-ring');
+
+                // Don't double-trigger while already loading
+                if (ring.classList.contains('loading')) return;
+
+                // Show spinner
+                ring.classList.add('loading');
+
+                // Create a temporary video element to preload
+                const tempVideo = document.createElement('video');
+                tempVideo.preload = 'auto';
+                tempVideo.src = src;
+
+                const stopSpinner = () => ring.classList.remove('loading');
+
+                tempVideo.addEventListener('canplay', () => {
+                    stopSpinner();
+
+                    // Hand off to the modal player
+                    const player = document.getElementById('reelPlayer');
+                    player.src = src;
+                    showModal('videoModal');
+                    player.play().catch(() => {}); // autoplay may be blocked on some browsers
+
+                    // Free temp element
+                    tempVideo.src = '';
+                }, { once: true });
+
+                // Timeout fallback — open anyway after 8s if canplay doesn't fire
+                const fallback = setTimeout(() => {
+                    stopSpinner();
+                    const player = document.getElementById('reelPlayer');
+                    player.src = src;
+                    showModal('videoModal');
+                }, 8000);
+
+                tempVideo.addEventListener('canplay', () => clearTimeout(fallback), { once: true });
+
+                tempVideo.addEventListener('error', () => {
+                    stopSpinner();
+                    alert('Could not load video. Check the file path or URL.');
+                }, { once: true });
+            });
+        });
+
+        /* ─── Share & Cards ──────────────────────────────────── */
         function shareProduct(name, url) {
             if (navigator.share) navigator.share({ title: name, url: url });
             else { navigator.clipboard.writeText(url); alert("Link copied!"); }
@@ -253,6 +441,7 @@
             });
         }
 
+        /* ─── Search ─────────────────────────────────────────── */
         function handleGlobalSearch() {
             const query = document.getElementById('productSearch').value.toLowerCase().trim();
             const body = document.getElementById('pageBody');
@@ -291,6 +480,7 @@
             }
         }
 
+        /* ─── Product Info Modal ─────────────────────────────── */
         function openProductInfo(name) {
             const p = productData.find(x => x.name === name);
             if(p) {
@@ -308,6 +498,7 @@
             }
         }
 
+        /* ─── Tabs ───────────────────────────────────────────── */
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener("click", () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove("active"));
@@ -317,6 +508,7 @@
             });
         });
 
+        /* ─── Misc ───────────────────────────────────────────── */
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.search-outer')) document.getElementById('suggestions').style.display = 'none';
         });
