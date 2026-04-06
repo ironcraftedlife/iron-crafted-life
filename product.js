@@ -216,16 +216,16 @@ const productData = [
                 deficiency: "Shaky footage, limited camera angles, difficulty filming solo."
             },
             {
-                name: "Ashwagandha", 
+                name: "Shilajit", 
                 img: "images/ashwagandha.jpg", 
                 buy: "https://amzn.to/4miHsdg", 
                 category: "supplements",
-                what: "An adaptogenic herb that helps the body manage stress and balance cortisol levels.",
-                benefits: "Reduces anxiety and stress, improves sleep quality, boosts testosterone in men, and enhances physical performance.",
-                dosage: "300–600 mg of high-quality extract (like KSM-66) per day.",
-                sources: "Withania somnifera plant root.",
-                when: "Night (for sleep) or morning (for stress management).",
-                practices: "Take with food to avoid stomach upset. Cycle use (e.g., 5 days on, 2 days off) to maintain effectiveness.",
-                deficiency: "High cortisol, chronic stress, poor sleep quality, low libido."
+                what: "A natural sticky resin found in the rocks of the Himalayas, formed over centuries from the slow decomposition of plants.",
+                benefits: "Boosts energy and stamina, improves testosterone levels, enhances cognitive function, and acts as a powerful antioxidant.",
+                dosage: "300–500 mg/day (roughly a pea-sized portion).",
+                sources: "High-altitude Himalayan rocks.",
+                when: "Morning on an empty stomach or before a workout.",
+                practices: "Dissolve in warm water, milk, or green tea. Ensure you are using purified, lab-tested resin rather than raw forms.",
+                deficiency: "Low energy, decreased libido, poor focus, and slow physical recovery."
             },
         ];
