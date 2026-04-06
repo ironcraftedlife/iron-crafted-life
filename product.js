@@ -204,7 +204,7 @@ const productData = [
             },
             { 
                 name: "Digitek DTR 550 LW Tripod", 
-                img: "images/digitek-tripod.jpg", 
+                img: "images/tripod.jpg", 
                 buy: "https://amzn.to/3Ql8e8C", 
                 category: "accessories",
                 what: "A lightweight, adjustable aluminum tripod with a 3-way pan head.",
