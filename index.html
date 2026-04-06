@@ -50,6 +50,12 @@
             cursor: pointer; font-size: 0.85rem; white-space: nowrap;
         }
         @media (min-width: 769px) { .fixed-buttons { position: fixed; } }
+        
+        /* Mobile adjustment for 3 buttons */
+        @media (max-width: 480px) {
+            .fixed-buttons { top: 15px; right: 10px; gap: 5px; }
+            .fixed-buttons button { padding: 8px 10px; font-size: 0.75rem; }
+        }
 
         /* HERO & SEARCH */
         .hero { background: #111; padding: 60px 20px 20px 20px; text-align: center; }
@@ -68,31 +74,24 @@
         .suggestion-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #222; }
         .suggestion-item:hover { background: #2b7cff; }
 
-        /* =============================================
-           REEL CIRCLES — INSTAGRAM-STYLE LAZY LOADING
-           ============================================= */
+        /* REEL CIRCLES */
         .reel-container {
             display: flex; gap: 15px; justify-content: center;
             padding: 20px 0; overflow-x: auto; scrollbar-width: none;
         }
         .reel-container::-webkit-scrollbar { display: none; }
-
         .reel-item {
             cursor: pointer; flex-shrink: 0;
             transition: transform 0.2s;
             display: flex; flex-direction: column; align-items: center; gap: 6px;
         }
         .reel-item:hover { transform: scale(1.05); }
-
-        /* The ring wrapper — holds spinner + circle */
         .reel-ring {
             width: 75px; height: 75px;
             border-radius: 50%;
             position: relative;
             display: flex; align-items: center; justify-content: center;
         }
-
-        /* Default gradient ring (idle state) */
         .reel-ring::before {
             content: '';
             position: absolute; inset: 0;
@@ -104,8 +103,6 @@
             mask-composite: exclude;
             transition: opacity 0.3s;
         }
-
-        /* Loading spinner ring — hidden by default */
         .reel-ring .spinner-ring {
             position: absolute; inset: 0;
             border-radius: 50%;
@@ -113,17 +110,12 @@
             border-top-color: #2b7cff;
             border-right-color: #2b7cff;
             animation: spin 0.9s linear infinite;
-            display: none; /* hidden until loading */
+            display: none;
             z-index: 2;
         }
-
-        /* When loading: show spinner, dim static ring */
         .reel-ring.loading::before { opacity: 0.15; }
         .reel-ring.loading .spinner-ring { display: block; }
-
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Inner circle — shows poster image (no autoplay video) */
         .reel-circle {
             width: 67px; height: 67px;
             border-radius: 50%;
@@ -132,30 +124,14 @@
             position: relative;
             z-index: 1;
         }
-
-        /* Canvas auto-thumbnail */
         canvas.reel-thumb {
             width: 100%; height: 100%;
             object-fit: cover;
             border-radius: 50%;
             display: block;
         }
-
-        /* Poster image — shown before video loads */
-        .reel-circle img.reel-poster {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;
-        }
-
         .reel-play-icon { display: none; }
-
-        .reel-label {
-            font-size: 0.7rem;
-            color: #888;
-            white-space: nowrap;
-        }
+        .reel-label { font-size: 0.7rem; color: #888; white-space: nowrap; }
 
         /* TABS */
         .tabs-container { background: #141414; border-bottom: 1px solid #222; width: 100%; position: sticky; top: 0; z-index: 100; }
@@ -179,12 +155,9 @@
         .product-info a { display: block; padding: 10px; background: #2b7cff; border-radius: 5px; color: white; text-decoration: none; font-weight: 600; }
 
         #noResults { display: none; text-align: center; padding: 40px; color: #555; font-style: italic; }
-
-        /* GUIDE CONTENT STYLING */
         .info-label { color: #2b7cff; font-weight: 600; margin-top: 15px; display: block; }
         .info-text { margin: 4px 0 10px 0; line-height: 1.5; color: #ccc; }
 
-        /* FOOTER */
         footer { background: #111; padding: 40px 20px; text-align: center; border-top: 1px solid #222; margin-top: 50px; }
         .social-links { margin-bottom: 15px; }
         .social-links a { color: #2b7cff; text-decoration: none; margin: 0 10px; }
@@ -198,7 +171,6 @@
 </head>
 <body id="pageBody">
 
-    <!-- Info Modal -->
     <div class="modal-overlay" id="infoModal">
         <div class="modal-window">
             <div class="modal-header"><h2>Read This First</h2><button class="close-modal" onclick="hideModal('infoModal')">&times;</button></div>
@@ -215,39 +187,32 @@
         </div>
     </div>
 
-    <!-- Earnings Modal -->
     <div class="modal-overlay" id="earningsModal">
-    <div class="modal-window">
-        <div class="modal-header"><h2>📊 Monthly Affiliate Earnings</h2><button class="close-modal" onclick="hideModal('earningsModal')">&times;</button></div>
-        <div class="modal-body">
-            <p style="color:#888; font-size:0.85rem; margin-top:0;">Updated monthly. Full transparency — no hiding numbers.</p>
-
-            <div style="width: 100%; margin-bottom: 20px; border-radius: 12px; overflow: hidden; border: 1px solid #333;">
-                <img src="images/earnings.jpeg" alt="Earnings Screenshot" style="width: 100%; display: block; object-fit: cover;">
-            </div>
-
-            <div style="background:#1a1a1a; border-radius:12px; padding:20px; margin:15px 0; border:1px solid #2b7cff33;">
-                <div style="font-size:0.8rem; color:#888; margin-bottom:4px;">March 2026</div>
-                <div style="font-size:2rem; font-weight:800; color:#2b7cff;">₹0</div>
-                <div style="font-size:0.85rem; color:#666; margin-top:4px;">Commission earned this month</div>
-            </div>
-
-            <div style="background:#1a1a1a; border-radius:12px; padding:20px; margin:15px 0; border:1px solid #333;">
-                <div style="font-size:0.85rem; color:#aaa; margin-bottom:10px; font-weight:600;">🎯 Current Goal</div>
-                <div style="font-size:1rem; color:#e6e6e6; margin-bottom:12px;">Studio Light — <strong style="color:#fff;">₹2,800</strong></div>
-                <div style="background:#222; border-radius:30px; height:10px; overflow:hidden;">
-                    <div style="width:0%; height:100%; background:linear-gradient(90deg,#2b7cff,#a855f7); border-radius:30px; transition:width 0.6s ease;"></div>
+        <div class="modal-window">
+            <div class="modal-header"><h2>📊 Monthly Affiliate Earnings</h2><button class="close-modal" onclick="hideModal('earningsModal')">&times;</button></div>
+            <div class="modal-body">
+                <p style="color:#888; font-size:0.85rem; margin-top:0;">Updated monthly. Full transparency — no hiding numbers.</p>
+                <div style="width: 100%; margin-bottom: 20px; border-radius: 12px; overflow: hidden; border: 1px solid #333;">
+                    <img src="images/earnings.jpeg" alt="Earnings Screenshot" style="width: 100%; display: block; object-fit: cover;">
                 </div>
-                <div style="font-size:0.75rem; color:#555; margin-top:6px;">₹0 of ₹2,800 — 0% funded</div>
+                <div style="background:#1a1a1a; border-radius:12px; padding:20px; margin:15px 0; border:1px solid #2b7cff33;">
+                    <div style="font-size:0.8rem; color:#888; margin-bottom:4px;">March 2026</div>
+                    <div style="font-size:2rem; font-weight:800; color:#2b7cff;">₹0</div>
+                    <div style="font-size:0.85rem; color:#666; margin-top:4px;">Commission earned this month</div>
+                </div>
+                <div style="background:#1a1a1a; border-radius:12px; padding:20px; margin:15px 0; border:1px solid #333;">
+                    <div style="font-size:0.85rem; color:#aaa; margin-bottom:10px; font-weight:600;">🎯 Current Goal</div>
+                    <div style="font-size:1rem; color:#e6e6e6; margin-bottom:12px;">Studio Light — <strong style="color:#fff;">₹2,800</strong></div>
+                    <div style="background:#222; border-radius:30px; height:10px; overflow:hidden;">
+                        <div style="width:0%; height:100%; background:linear-gradient(90deg,#2b7cff,#a855f7); border-radius:30px; transition:width 0.6s ease;"></div>
+                    </div>
+                    <div style="font-size:0.75rem; color:#555; margin-top:6px;">₹0 of ₹2,800 — 0% funded</div>
+                </div>
             </div>
-
-            <p style="font-size:0.8rem; color:#555; text-align:center; margin-top:20px;">Once this goal is hit, the next goal will be posted here.</p>
+            <div class="modal-footer"><button class="understand-btn" onclick="hideModal('earningsModal')">Close</button></div>
         </div>
-        <div class="modal-footer"><button class="understand-btn" onclick="hideModal('earningsModal')">Close</button></div>
     </div>
-</div>
 
-    <!-- Product Detail Modal -->
     <div class="modal-overlay" id="productDetailModal">
         <div class="modal-window">
             <div class="modal-header"><h2 id="detailTitle">Product Info</h2><button class="close-modal" onclick="hideModal('productDetailModal')">&times;</button></div>
@@ -256,7 +221,6 @@
         </div>
     </div>
 
-    <!-- Video Modal -->
     <div class="modal-overlay" id="videoModal">
         <div class="modal-window video-modal-window">
             <div class="modal-header" style="border:none; position:absolute; right:0; background:transparent;">
@@ -271,6 +235,9 @@
     <div class="fixed-buttons">
         <button onclick="showModal('infoModal')">Read This</button>
         <button onclick="showModal('earningsModal')" style="background:#1a1a1a; border:1px solid #2b7cff; color:#2b7cff;">₹ Earnings</button>
+        <a href="supplements_description.pdf" download="supplements_description.pdf" style="text-decoration: none;">
+            <button style="background:#222; border:1px solid #444; color:#ccc;">📥 Guide</button>
+        </a>
     </div>
 
     <div id="main-content">
@@ -283,30 +250,7 @@
                 <div id="suggestions"></div>
             </div>
 
-            <!--
-                REEL SECTION
-                ─────────────────────────────────────────────────────────────────
-                HOW IT WORKS:
-                  • Each circle shows a static poster image (no video loads on page load).
-                  • On click: the ring switches to a spinning loader, the video is fetched,
-                    and once ready it opens in the modal. Page content loads instantly.
-
-                HOW TO USE:
-                  • data-src  → path or URL to your video (local, S3, Bunny CDN, GDrive direct link…)
-                  • data-poster → path or URL to a thumbnail/poster image for the circle
-                  • data-label → short caption shown below the circle
-
-                RECOMMENDED VIDEO HOSTS (no embed restrictions):
-                  • Bunny CDN  (bunnycdn.com) — cheapest, fastest for video
-                  • Cloudflare R2 / AWS S3 — reliable, pay-per-use
-                  • Google Drive — free; use direct download link format:
-                      https://drive.google.com/uc?export=download&id=FILE_ID
-                  • Supabase Storage — free tier, easy API
-                ─────────────────────────────────────────────────────────────────
-            -->
-            <div class="reel-container" id="reelContainer">
-                <!-- Reels injected dynamically per active tab -->
-            </div>
+            <div class="reel-container" id="reelContainer"></div>
         </section>
 
         <div class="tabs-container">
@@ -340,12 +284,11 @@
 
     <script src="product.js"></script>
     <script>
-
-        /* ─── Modals ─────────────────────────────────────────── */
+        /* Modals */
         const showModal = (id) => document.getElementById(id).style.display = 'flex';
         const hideModal = (id) => document.getElementById(id).style.display = 'none';
 
-        /* ─── Video Modal ────────────────────────────────────── */
+        /* Video Modal */
         function closeVideo() {
             const player = document.getElementById('reelPlayer');
             player.pause();
@@ -354,10 +297,7 @@
             hideModal('videoModal');
         }
 
-        /* ─── REEL CONFIG PER CATEGORY ───────────────────────────
-         * Each category gets its own shuffled order of videos.
-         * Just change the src/label values to swap videos per tab.
-         * ─────────────────────────────────────────────────────── */
+        /* Reels Config */
         const reelsByCategory = {
             supplements: [
                 { src: "videos/Video1.mp4", label: "Reel 1" },
@@ -416,7 +356,7 @@
         }
 
         function handleReelClick(item) {
-            const src  = item.dataset.src;
+            const src = item.dataset.src;
             const ring = item.querySelector('.reel-ring');
             if (ring.classList.contains('loading')) return;
             ring.classList.add('loading');
@@ -435,24 +375,15 @@
             };
 
             player.addEventListener('canplay', openAndPlay, { once: true });
-
             const fallback = setTimeout(() => {
                 player.removeEventListener('canplay', openAndPlay);
                 ring.classList.remove('loading');
                 showModal('videoModal');
             }, 6000);
-
             player.addEventListener('canplay', () => clearTimeout(fallback), { once: true });
-
-            player.addEventListener('error', () => {
-                clearTimeout(fallback);
-                player.removeEventListener('canplay', openAndPlay);
-                ring.classList.remove('loading');
-                showModal('videoModal');
-            }, { once: true });
         }
 
-        /* ─── Share & Cards ──────────────────────────────────── */
+        /* Products Logic */
         function shareProduct(name, url) {
             if (navigator.share) navigator.share({ title: name, url: url });
             else { navigator.clipboard.writeText(url); alert("Link copied!"); }
@@ -480,7 +411,6 @@
             });
         }
 
-        /* ─── Search ─────────────────────────────────────────── */
         function handleGlobalSearch() {
             const query = document.getElementById('productSearch').value.toLowerCase().trim();
             const body = document.getElementById('pageBody');
@@ -519,7 +449,6 @@
             }
         }
 
-        /* ─── Product Info Modal ─────────────────────────────── */
         function openProductInfo(name) {
             const p = productData.find(x => x.name === name);
             if(p) {
@@ -537,7 +466,7 @@
             }
         }
 
-        /* ─── Tabs ───────────────────────────────────────────── */
+        /* Tabs Logic */
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener("click", () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove("active"));
@@ -549,7 +478,7 @@
             });
         });
 
-        /* ─── Misc ───────────────────────────────────────────── */
+        /* Misc */
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.search-outer')) document.getElementById('suggestions').style.display = 'none';
         });
@@ -559,35 +488,26 @@
             btn.style.display = document.documentElement.scrollTop > 400 ? "block" : "none";
         };
 
-        /* ─── AUTO THUMBNAILS ────────────────────────────────────
-         * For each reel, create a hidden <video>, seek to 0.5s,
-         * then paint that frame onto the circle's <canvas>.
-         * Uses crossOrigin so it works with CDN/S3 hosted videos too.
-         * Fails silently — circle just stays dark with play icon.
-         * ─────────────────────────────────────────────────────── */
         function generateThumbnail(src, canvas) {
             const vid = document.createElement('video');
             vid.crossOrigin = 'anonymous';
             vid.preload = 'metadata';
             vid.muted = true;
             vid.src = src;
-            vid.addEventListener('loadeddata', () => {
-                vid.currentTime = 0.5;
-            }, { once: true });
+            vid.addEventListener('loadeddata', () => { vid.currentTime = 0.5; }, { once: true });
             vid.addEventListener('seeked', () => {
-                canvas.width  = vid.videoWidth  || 67;
+                canvas.width = vid.videoWidth || 67;
                 canvas.height = vid.videoHeight || 67;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
-                vid.src = ''; // free memory
+                vid.src = ''; 
             }, { once: true });
-            vid.addEventListener('error', () => { vid.src = ''; }, { once: true });
             vid.load();
         }
 
         window.onload = () => {
             renderAll();
-            renderReels('supplements'); // default tab
+            renderReels('supplements');
             showModal('infoModal');
         };
     </script>
