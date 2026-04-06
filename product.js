@@ -215,17 +215,17 @@ const productData = [
                 practices: "Ensure the legs are locked securely; use the hook for extra weight in windy conditions for stability.",
                 deficiency: "Shaky footage, limited camera angles, difficulty filming solo."
             },
-            { 
-                name: "Weight Gain Capsules", 
-                img: "images/weight-gain.jpg", 
+            {
+                name: "Ashwagandha", 
+                img: "images/ashwagandha.jpg", 
                 buy: "https://amzn.to/4miHsdg", 
                 category: "supplements",
-                what: "An Ayurvedic supplement designed to improve appetite and nutrient absorption.",
-                benefits: "Supports healthy weight gain, boosts metabolism efficiency, and improves energy levels.",
-                dosage: "1-2 capsules daily, or as directed on the pack.",
-                sources: "Herbal extracts (typically Ashwagandha, Shatavari, etc.).",
-                when: "After meals.",
-                practices: "Combine with a high-protein diet and strength training for muscle-focused weight gain.",
-                deficiency: "Low appetite, difficulty maintaining weight, fast metabolism-related fatigue."
-            }
+                what: "An adaptogenic herb that helps the body manage stress and balance cortisol levels.",
+                benefits: "Reduces anxiety and stress, improves sleep quality, boosts testosterone in men, and enhances physical performance.",
+                dosage: "300–600 mg of high-quality extract (like KSM-66) per day.",
+                sources: "Withania somnifera plant root.",
+                when: "Night (for sleep) or morning (for stress management).",
+                practices: "Take with food to avoid stomach upset. Cycle use (e.g., 5 days on, 2 days off) to maintain effectiveness.",
+                deficiency: "High cortisol, chronic stress, poor sleep quality, low libido."
+            },
         ];
