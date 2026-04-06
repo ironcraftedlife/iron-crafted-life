@@ -79,6 +79,33 @@ const productData = [
                 practices: "Use compression straps.",
                 deficiency: "N/A"
             },
+            {
+                name: "GNC Pro Performance 100% Whey Protein  Use code WARIKO for an additional 15% discount.",
+                img: "images/gnc-whey-protein.webp", // Update with your actual image path
+                buy: "https://www.guardian.in/products/gnc-pro-performance-100-whey-protein",
+                category: "supplements",
+                what: "A high-quality macronutrient supplement delivering 100% pure whey protein to support muscle maintenance and growth.",
+                benefits: "Promotes lean muscle growth, accelerates post-workout recovery, and helps meet daily protein targets.",
+                dosage: "1 scoop (typically providing ~24g protein) mixed with water or milk.",
+                sources: "Derived from dairy (whey).",
+                when: "Post-workout, first thing in the morning, or as a snack between meals.",
+                practices: "Mix with water for faster digestion post-workout, or milk/smoothies for sustained release. Store in a cool, dry place.",
+                deficiency: "Muscle loss, prolonged muscle soreness, slow recovery, fatigue, and difficulty building strength."
+            },
+            
+            {
+                name: "GNC Pro Performance Creatine Monohydrate  Use code WARIKO for an additional 15% discount.",
+                img: "images/gnc-creatine.webp", // Update with your actual image path
+                buy: "https://www.guardian.in/products/gnc-pro-performance-creatine-monohydrate-3000mg",
+                category: "supplements",
+                what: "A highly researched supplement supplying 3000mg of pure creatine monohydrate per serving to enhance cellular energy production.",
+                benefits: "Increases power output, boosts muscle strength, improves high-intensity exercise performance, and hydrates muscle cells.",
+                dosage: "3000mg (3g) daily.",
+                sources: "Naturally found in small amounts in red meat and seafood, but synthesized for purity in supplements.",
+                when: "Can be taken pre-workout, post-workout, or any time of day for maintenance.",
+                practices: "Mix with water, juice, or a protein shake. Ensure adequate daily water intake (at least 3-4 liters) to prevent cramping.",
+                deficiency: "Rapid muscle fatigue during explosive or heavy lifting, stagnant strength gains."
+            },
 
             // ── NEW FRIDO PRODUCTS ──────────────────────────────────────────
             {
@@ -161,11 +188,12 @@ const productData = [
                 practices: "Mix with water for faster digestion post-workout, or milk/smoothies for sustained release. Store in a cool, dry place.",
                 deficiency: "Muscle loss, prolonged muscle soreness, slow recovery, fatigue, and difficulty building strength."
             },
+            
             {
                 name: "GNC Pro Performance Creatine Monohydrate  Use code WARIKO for an additional 15% discount.",
                 img: "images/gnc-creatine.webp", // Update with your actual image path
                 buy: "https://www.guardian.in/products/gnc-pro-performance-creatine-monohydrate-3000mg",
-                category: "supplements",
+                category: "fitness",
                 what: "A highly researched supplement supplying 3000mg of pure creatine monohydrate per serving to enhance cellular energy production.",
                 benefits: "Increases power output, boosts muscle strength, improves high-intensity exercise performance, and hydrates muscle cells.",
                 dosage: "3000mg (3g) daily.",
@@ -173,5 +201,31 @@ const productData = [
                 when: "Can be taken pre-workout, post-workout, or any time of day for maintenance.",
                 practices: "Mix with water, juice, or a protein shake. Ensure adequate daily water intake (at least 3-4 liters) to prevent cramping.",
                 deficiency: "Rapid muscle fatigue during explosive or heavy lifting, stagnant strength gains."
+            },
+            { 
+                name: "Digitek DTR 550 LW Tripod", 
+                img: "images/digitek-tripod.jpg", 
+                buy: "https://amzn.to/3Ql8e8C", 
+                category: "accessories",
+                what: "A lightweight, adjustable aluminum tripod with a 3-way pan head.",
+                benefits: "Provides stable support for cameras and smartphones, improves video quality, and allows for versatile shooting angles.",
+                dosage: "N/A",
+                sources: "N/A",
+                when: "Content creation, photography, or video calls.",
+                practices: "Ensure the legs are locked securely; use the hook for extra weight in windy conditions for stability.",
+                deficiency: "Shaky footage, limited camera angles, difficulty filming solo."
+            },
+            { 
+                name: "Weight Gain Capsules", 
+                img: "images/weight-gain.jpg", 
+                buy: "https://amzn.to/4miHsdg", 
+                category: "supplements",
+                what: "An Ayurvedic supplement designed to improve appetite and nutrient absorption.",
+                benefits: "Supports healthy weight gain, boosts metabolism efficiency, and improves energy levels.",
+                dosage: "1-2 capsules daily, or as directed on the pack.",
+                sources: "Herbal extracts (typically Ashwagandha, Shatavari, etc.).",
+                when: "After meals.",
+                practices: "Combine with a high-protein diet and strength training for muscle-focused weight gain.",
+                deficiency: "Low appetite, difficulty maintaining weight, fast metabolism-related fatigue."
             }
         ];
